@@ -51,9 +51,9 @@ class SppController extends Controller
             ]);
 
             DB::commit();
-        }catch(Exeption $e){
+        }catch(Exception $e){
             DB::rollback();
-            return redirect()->route('admin.spp.index')->with('fail', 'gagal Menambahkan Data '.$e);
+            return redirect()->route('admin.spp.index')->with('fail', 'Gagal Menambahkan Data '.$e);
         }
 
         return redirect()->route('admin.spp.index')->with('success', 'Berhasil Menambahkan Data');
@@ -97,12 +97,20 @@ class SppController extends Controller
             'nominal' => 'required|integer'
         ]);
 
+        DB::beginTransaction();
+        try {
         $store = Spp::where('spp_id', $id)->update([
             'year' => $credential['year'],
             'nominal' => $credential['nominal']
         ]);
+        DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('admin.spp.index')->with('fail', 'Gagal mengubah data '.$e);
+        }
 
-        return redirect()->route('admin.spp.index')->with('success', 'Berhasil Mengubah Data');
+
+        return redirect()->route('admin.spp.index')->with('success', 'Berhasil mengubah data');
     }
 
     /**
