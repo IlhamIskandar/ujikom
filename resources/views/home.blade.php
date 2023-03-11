@@ -1,17 +1,16 @@
 @extends('layouts.app')
 @section('content')
 <div class="contriner-fluid">
-	<div class="row bg-info text-white align-items-center justify-content-center" style="height:300px;">
-		<div class="col-3 text-center">
+	<div class="row bg-info text-white align-items-center justify-content-center gx-0 mb-3" style="height:300px;">
+		<div class="col-3  text-center">
 			<img src="storage/img/smknekat-logo.png" alt="" width="200px">
 		</div>
 		<div class="col-4 fs-3">
 			Permudah pembayaran SPP dan, cek riwayat pembayarannya di website SPP Nekat
 		</div>
-		
 	</div>
-    <div class="row justify-content-center">
-		<div class="col-4 mx-auto card">
+    <div class="row justify-content-center gx-0">
+		<div class="col-4 card">
 			@guest
 		    
 			@if(session()->has('loginfailed'))

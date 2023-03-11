@@ -11,7 +11,7 @@
 </style>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg {{-- navbar-dark bg-primary --}}">
   <!-- Container wrapper -->
   <div class="container-fluid">
     <!-- Toggle button -->
