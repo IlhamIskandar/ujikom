@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-<div class="container">
+<div class="container-fluid">
 	<h4>SPP</h4>
 	<div class="row">
 		<div class="col">

@@ -1,7 +1,25 @@
 @extends('admin.layouts.app')
 @section('content')
-<div class="container">
+<div class="container-fluid">
 	<h4>SPP</h4>
+	@if ($errors->any())
+	<div class="row">
+		<div class="col">
+			<div class="alert alert-danger">
+				<ul>
+					@if(session('fail'))
+					<li>
+					{{ session('fail')}}
+					</li>
+					@endif
+		            @foreach ($errors->all() as $error)
+		            <li>{{ $error }}</li>
+		            @endforeach
+		        </ul>
+		    </div>
+		</div>
+	</div>
+	@endif
 	<div class="row">
 		<div class="col-6">
 			<div class="card">

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-<div class="container">
+<div class="container-fluid">
 <h4>Siswa</h4>
 <form action="{{route('admin.student.store')}}" method="post">
 	@if ($errors->any())
@@ -8,10 +8,14 @@
 		<div class="col">
 			<div class="alert alert-danger">
 				<ul>
-
-	            @foreach ($errors->all() as $error)
-	            <li>{{ $error }}</li>
-		            @endforeach
+					@if(session('fail'))
+					<li>
+					{{ session('fail')}}
+					</li>
+					@endif
+		            @foreach ($errors->all() as $error)
+		            <li>{{ $error }}</li>
+			        @endforeach
 		        </ul>
 		    </div>
 		</div>
@@ -33,20 +37,20 @@
 					<hr>
 					<label for="nis">NIS</label>
 					<div class="input-group mb-3">
-						<input class="form-control" type="text" name="nis" id="nis" placeholder="masukan nis" required value="{{old('nis')}}">
+						<input class="form-control" type="text" name="nis" id="nis" placeholder="masukan nis" value="{{old('nis')}}" required>
 					</div>
 					<hr>
 					<label for="name">Nama Siswa</label>
 					<div class="input-group mb-3">
-						<input class="form-control " type="text" name="name" id="name" placeholder="masukan nama siswa" required value="{{old('name')}}">
+						<input class="form-control " type="text" name="name" id="name" placeholder="masukan nama siswa" value="{{old('name')}}" required>
 					</div>
 					<hr>
 					<label for="class">Kelas & Jurusan</label>
 					<div class="input-group mb-3">
-						<select class="select form-control" id="class" name="class" required value="{{old('class')}}">
+						<select class="select form-control" id="class" name="class" value="{{old('class')}}" required>
 							<option value="">Pilih Kelas & Jurusan</option>
 							@foreach($classes as $row)
-							<option value="{{$row->class_id}}" {{$row->class_id = old('class') ? 'selected' : ''}}>
+							<option value="{{$row->class_id}}" {{$row->class_id == old('class') ? 'selected' : ''}}>
 								{{$row->class_name.' '.$row->competency}}
 							</option>
 							@endforeach
@@ -55,21 +59,21 @@
 					<hr>
 					 <label class="" for="address">Alamat</label>
 					<div class="input-group mb-3">
-					  <textarea class="form-control" name="address" id="address" rows="4" placeholder="masukan alamat siswa">{{old('address')}}</textarea>
+					  <textarea class="form-control" name="address" id="address" rows="4" placeholder="masukan alamat siswa" required>{{old('address')}}</textarea>
 					</div>
 					<hr>
 					<label for="phone">Telepon</label>
 					<div class="input-group mb-3">
-						<input class="form-control" type="text" name="phone" id="phone" placeholder="masukan nomor telepon siswa" value="{{old('phone')}}">
+						<input class="form-control" type="text" name="phone" id="phone" placeholder="masukan nomor telepon siswa" value="{{old('phone')}}" required>
 					</div>
 					<hr>
 					<div class="">
 						<label for="spp">Tahun Ajaran (SPP)</label>
-						<select class="select form-control" name="spp" required value="{{old('spp')}}">
+						<select class="select form-control" name="spp" id="spp" value="{{old('spp')}}" required>
 							<option value="">Pilih Tahun SPP</option>
 							@foreach($spps as $row)
-							<option value="{{$row->id_spp}}" {{$row->id_spp = old('spp') ? 'selected' : ''}}>
-								{{$row->year}}
+							<option value="{{$row->spp_id}}" {{$row->spp_id == old('spp') ? 'selected' : ''}}>
+								{{$row->year.' (Rp. '.$row->nominal.')'}}
 							</option>
 							@endforeach
 						</select>

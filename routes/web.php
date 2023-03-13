@@ -2,9 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\ClassController;
 use App\Http\Controllers\admin\SppController;
-
+use App\Http\Controllers\admin\StudentController;
+use App\Http\Controllers\admin\StaffController;
 use App\Http\Controllers\admin\PayController;
+use App\Http\Controllers\PaymentController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +24,7 @@ use App\Http\Controllers\admin\PayController;
 Route::get('/', function () {
     return view('home');
 });
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 Auth::routes();
 
@@ -73,7 +77,10 @@ Route::prefix('admin')->middleware('checkRole:admin')->group(function(){
 
 Route::prefix('payment')->middleware('checkRole:admin, staff')->group(function(){
 	Route::get('/', [PaymentController::class, 'index'])->name('payment.index');
-
-	Route::get('/entry', [PaymentController::class, 'insert'])->name('payment.entry');
+	Route::get('/entry', [PaymentController::class, 'create'])->name('payment.entry');
+	Route::get('/history', [PaymentController::class, 'index'])->name('payment.history');
+	Route::post('/entry/store', [PaymentController::class, 'store'])->name('payment.store');
 
 });
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -4,6 +4,10 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class StaffController extends Controller
 {
@@ -14,7 +18,8 @@ class StaffController extends Controller
      */
     public function index()
     {
-        //
+        $data = User::where('role','staff')->get();
+        return view('admin.staff.index', compact('data'));
     }
 
     /**
@@ -24,7 +29,7 @@ class StaffController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.staff.create');
     }
 
     /**
@@ -35,7 +40,37 @@ class StaffController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $credential = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'username' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+        // dd($credential);
+        DB::beginTransaction();
+        try {
+            $store = User::create([
+                'username' => $credential['username'],
+                'password' => Hash::make($credential['password']),
+                'name' => $credential['name'],
+                'role' => 'staff',
+                'email' => $credential['email'],
+            ]);
+            
+            DB::commit();
+
+        } catch (Exception $e) {
+            DB::rollback();
+            // dd($e);
+            $errorCode = $e->errorInfo[1];
+
+            if($errorCode == 1062){
+                return redirect()->route('admin.staff.create')->with('fail', 'Gagal menambahkan data')->withErrors('Email atau Username telah digunakan')->withInput();
+            }
+            return redirect()->route('admin.staff.create')->with('fail', 'Gagal menambahkan data')->withErrors($e->getMessage());
+        }
+
+        return redirect()->route('admin.staff.index')->with('success', 'Berhasil menambahkan data');
     }
 
     /**
@@ -46,7 +81,7 @@ class StaffController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -57,8 +92,10 @@ class StaffController extends Controller
      */
     public function edit($id)
     {
-        //
-    }
+    	$data = User::where('user_id',$id)->first();
+        // dd($data);
+        return view('admin.staff.edit', compact('data'));
+	}
 
     /**
      * Update the specified resource in storage.
@@ -69,7 +106,34 @@ class StaffController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $credential = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'username' => 'required',
+        ]);
+
+
+        DB::beginTransaction();
+        try {
+
+            $update = User::where('user_id', $id)->update([
+                'username' => $credential['username'],
+                'name' => $credential['name'],
+                'email' => $credential['email'],
+            ]);
+            
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            $errorCode = $e->errorInfo[1];
+            if($errorCode == 1062){
+                return redirect()->route('admin.staff.create')->with('fail', 'Gagal mengubah data')->withErrors('Email atau Username telah digunakan')->withInput();
+            }
+            return redirect()->route('admin.staff.create')->with('fail', 'Gagal mengubah data')->withErrors($e->getMessage());
+        }
+
+        return redirect()->route('admin.staff.index')->with('success', 'Berhasil mengubah data');
     }
 
     /**
@@ -80,6 +144,16 @@ class StaffController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $a = User::destroy($id);
+            
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('admin.staff.index')->with('fail', 'Gagal menghapus data')->withErrors($e->getMessage());
+        }
+
+        return redirect()->route('admin.staff.index')->with('success', 'Berhasil menghapus data');
     }
 }

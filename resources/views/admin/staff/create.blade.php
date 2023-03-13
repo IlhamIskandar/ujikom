@@ -1,14 +1,19 @@
 @extends('admin.layouts.app')
 @section('content')
-<div class="container">
+<div class="container-fluid">
 	<h4>Staff</h4>
 	@if ($errors->any())
 	<div class="row">
 		<div class="col">
 			<div class="alert alert-danger">
 				<ul>
-	            @foreach ($errors->all() as $error)
-	            <li>{{ $error }}</li>
+					@if(session('fail'))
+					<li>
+					{{ session('fail')}}
+					</li>
+					@endif
+		            @foreach ($errors->all() as $error)
+		            <li>{{ $error }}</li>
 		            @endforeach
 		        </ul>
 		    </div>
@@ -57,7 +62,7 @@
 						<hr>
 						<label for="password">Konfirmasi Password Akun Staff</label>
 						<div class="input-group mb-3">
-							<input class="form-control @error('password') is-invalid @enderror" type="password" name="password-confirm" id="password-confirmation-+-" placeholder="konfirmasi password akun" autofocus required>
+							<input class="form-control @error('password') is-invalid @enderror" type="password" name="password_confirmation" id="password_confirmation" placeholder="konfirmasi password akun" autofocus required>
 						</div>
 						<hr>
 						<div>

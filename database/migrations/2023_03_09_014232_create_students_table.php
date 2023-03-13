@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->unsignedbiginteger('nisn');
+            $table->string('nisn', 20);
             $table->primary('nisn');
-            $table->biginteger('nis')->unique();
+            $table->string('nis',20)->unique();
             $table->string('student_name');
-            $table->foreignId('class_id')->constrained('classes', 'class_id')->default(0)->onDelete('restrict')->onUpdate('restrict');
+            $table->foreignId('class_id')->constrained('classes', 'class_id')->default(0);
             $table->text('address');
-            $table->string('phone_number', 13);
-            $table->foreignId('spp_id')->constrained('spps', 'spp_id');
-            $table->foreignId('user_id')->constrained('users', 'user_id');
+            $table->string('phone_number', 20);
+            $table->foreignId('spp_id')->constrained('spps', 'spp_id');//->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users', 'user_id')->onUpdate('cascade')->onDelete('cascade');;
             $table->timestamps();
         });
     }

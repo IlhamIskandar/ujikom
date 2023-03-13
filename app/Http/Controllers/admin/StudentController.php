@@ -9,7 +9,8 @@ use App\Models\Student;
 use App\Models\Classes;
 use App\Models\Spp;
 use App\Models\User;
-
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class StudentController extends Controller
 {
@@ -59,26 +60,43 @@ class StudentController extends Controller
             'username' => 'required',
             'password' => 'required|confirmed',
         ]);
-        
-        
-        $account = User::create([
-            'name' => $credential['name'],
-            'email' => $credential['email'],
-            'username' => $credential['username'],
-            'password' => Hash::make($credential['password']),
-            'role' => 'siswa',
-        ]);
 
-        $store = Student::create([
-            'nisn' => $credential['nisn'],
-            'nis' => $credential['nis'],
-            'student_name' => $credential['name'],
-            'class_id' => $credential['class'],
-            'address' => $credential['address'],
-            'phone_number' => $credential['phone'],
-            'id_spp' => $credential['spp'],
-            'user_id' => $account['id'],
-        ]);
+        DB::beginTransaction();
+        try {
+            $account = User::create([
+                'name' => $credential['name'],
+                'email' => $credential['email'],
+                'username' => $credential['username'],
+                'password' => Hash::make($credential['password']),
+                'role' => 'siswa',
+            ]);
+            try {
+                $store = Student::create([
+                    'nisn' => $credential['nisn'],
+                    'nis' => $credential['nis'],
+                    'student_name' => $credential['name'],
+                    'class_id' => $credential['class'],
+                    'address' => $credential['address'],
+                    'phone_number' => $credential['phone'],
+                    'spp_id' => $credential['spp'],
+                    'user_id' => $account['user_id'],
+                ]);
+
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->route('admin.student.create')->with('fail', 'Gagal menambahkan data')->withErrors($e->getMessage())->withInput();
+                
+            }
+
+            // dd($account, $store);
+            DB::commit();
+            return redirect()->route('admin.student.index')->with('success', 'Berhasil menambahkan data');
+
+        } catch (Exception $e) {
+
+            DB::rollback();
+            return redirect()->route('admin.student.create')->with('fail', 'Gagal menambahkan data')->withErrors($e->getMessage())->withInput();
+        }
 
         return redirect()->route('admin.student.index')->with('success', 'Berhasil menambahkan data.');
     }
@@ -91,7 +109,7 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        $data = Student::where('nisn',$id)->join('classes', 'students.class_id', '=', 'classes.class_id')->join('spps','students.id_spp', '=', 'spps.id_spp')->join('users','students.user_id', '=', 'users.user_id')->first();
+        $data = Student::where('nisn',$id)->join('classes', 'students.class_id', '=', 'classes.class_id')->join('spps','students.spp_id', '=', 'spps.spp_id')->join('users','students.user_id', '=', 'users.user_id')->first();
 
         return view('admin.student.show', compact('data'));
     }
@@ -120,6 +138,7 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($id);
         $credential = $request->validate([
             'nisn' => 'required',
             'nis' => 'required',
@@ -132,27 +151,41 @@ class StudentController extends Controller
             'email' => 'required|email',
             'username' => 'required',
         ]);
-        
-        
-        $account = User::where('user_id', $request->id_account)->update([
-            'name' => $credential['name'],
-            'email' => $credential['email'],
-            'username' => $credential['username'],
-            'password' => $credential['nisn'],
 
-        ]);
+        DB::beginTransaction();
+        try {
+            $account = User::where('user_id', $request->id_account)->update([
+                'name' => $credential['name'],
+                'email' => $credential['email'],
+                'username' => $credential['username'],
+                'password' => $credential['nisn'],
 
-        $update = Student::where('nisn', $id)->update([
-            'nisn' => $credential['nisn'],
-            'nis' => $credential['nis'],
-            'student_name' => $credential['name'],
-            'class_id' => $credential['class'],
-            'address' => $credential['address'],
-            'phone_number' => $credential['phone'],
-            'id_spp' => $credential['spp'],
-        ]);
+            ]);
 
-        return redirect()->route('admin.student.index')->with('success', 'Berhasil mengubah data.');
+            try {
+                $update = Student::where('nisn', $id)->update([
+                    'nisn' => $credential['nisn'],
+                    'nis' => $credential['nis'],
+                    'student_name' => $credential['name'],
+                    'class_id' => $credential['class'],
+                    'address' => $credential['address'],
+                    'phone_number' => $credential['phone'],
+                    'spp_id' => $credential['spp'],
+                ]);
+                
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->route('admin.student.edit', $id)->with('fail', 'Gagal mengubah data')->withErrors($e->getMessage())->withInput();
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('admin.student.edit', $id)->with('fail', 'Gagal mengubah data')->withErrors($e->getMessage())->withInput();
+        }
+
+
+        return redirect()->route('admin.student.index')->with('success', 'Berhasil mengubah data');
     }
 
     /**
@@ -163,7 +196,16 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $a = Student::destroy($id);
+        DB::beginTransaction();
+        try {
+            $a = User::destroy($id);
+            
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('admin.student.index')->with('fail', 'Gagal menghapus data')->withErrors($e->getMessage());
+        }
+        
         return redirect()->route('admin.student.index');
     }
 }

@@ -14,7 +14,7 @@
   top: 0;
   bottom: 0;
   left: 0;
-  padding: 58px 0 0; /* Height of navbar */
+  padding: 58px 0 0;
   box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
   width: 240px;
   z-index: 600;
@@ -97,6 +97,8 @@
       </a>
 
       <!-- Right links -->
+      @guest
+      @else
       <ul class="navbar-nav ms-auto d-flex flex-row">
         <!-- Avatar -->
         <li class="nav-item dropdown">
@@ -108,6 +110,7 @@
             data-mdb-toggle="dropdown"
             aria-expanded="false"
           >
+          <span class="me-2">{{ Auth::user()->name }}</span>
             <img
               src="{{asset('storage/img/blank-user-avatar.jpg')}}"
               class="rounded-circle"
@@ -132,6 +135,7 @@
           </ul>
         </li>
       </ul>
+      @endguest
     </div>
     <!-- Container wrapper -->
   </nav>

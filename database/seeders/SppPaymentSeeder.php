@@ -19,7 +19,8 @@ class SppPaymentSeeder extends Seeder
     {
         DB::table('spp_payments')->insert([
         	'user_id' => 2,
-        	'nisn' => 123123,
+        	'nisn' => '0054890314',
+            'payer' => '0054890314',
         	'payment_date' => Carbon::now('GMT+7'),//'2023-03-09 00:00:00'
         	'spp_id' => 1,
         	'pay_amount' => 200000,

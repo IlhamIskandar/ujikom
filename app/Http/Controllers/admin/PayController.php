@@ -5,7 +5,12 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SppPayment;
+use App\Models\Student;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PayController extends Controller
 {
@@ -16,7 +21,7 @@ class PayController extends Controller
      */
     public function index()
     {
-        $data = SppPayment::join('users', 'users.user_id', 'spp_payments.user_id')->join('spps', 'spps.spp_id', 'spp_payments.spp_id')->join('students', 'students.nisn', 'spp_payments.nisn')->get();
+        $data = SppPayment::join('users', 'users.user_id', 'spp_payments.user_id')->join('spps', 'spps.spp_id', 'spp_payments.spp_id')->get()->sortByDesc('payment_date');
         // dd($data);
         return view('admin.payment.index', compact('data'));
     }
@@ -28,9 +33,27 @@ class PayController extends Controller
      */
     public function create(Request $request)
     {
+        $searchKey = $request->input('searchKey');
         $staff = Auth::user();
+
+        if($searchKey != null){
+            $data = Student::where('nisn', $searchKey)->join('classes', 'students.class_id', '=', 'classes.class_id')->join('spps','students.spp_id', '=', 'spps.spp_id')->get();
+            // dd($data);
+
+            if($data->count() == 0){
+                session()->flash('fail', 'Siswa tidak ditemukan');
+                return view('admin.payment.entry', compact('data', 'searchKey'));
+            }else{
+                return view('admin.payment.entry', compact('data', 'searchKey'));
+            }
+
+        }else{
+            $data = [];
+            // dd($data);
+            return view('admin.payment.entry', compact('data', 'searchKey'));
+        }
+        
         // dd($staff);
-        return view('admin.payment.entry');
     }
 
     /**
@@ -41,7 +64,35 @@ class PayController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        $credential = $request->validate([
+            'nisn' => 'required',
+            'spp_id' => 'required',
+            'pay_amount' => 'required',
+        ]);
+
+        // dd($request);
+        DB::beginTransaction();
+        try {
+            $store = SppPayment::create([
+                'user_id' => $user->user_id,
+                'nisn' => $credential['nisn'],
+                'payer' => $credential['nisn'],
+                'payment_date' => Carbon::now('GMT+7'),
+                'spp_id' => $credential['spp_id'],
+                'pay_amount' => $credential['pay_amount'],
+                'code' => Str::random(12),
+            ]);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->route('admin.payment.create')->withErrors($e->getMessage())->withInput();
+        }
+
+        return redirect()->route('admin.payment.index')->with('success', 'Berhasil menyimpan data pembayaran');
+        
+        
     }
 
     /**
@@ -86,6 +137,16 @@ class PayController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $a = SppPayment::destroy($id);
+            
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->route('admin.payment.index')->with('fail', 'Gagal menghapus data')->withErrors($e->getMessage());
+        }
+
+        return redirect()->route('admin.payment.index')->with('success', 'Berhasil menghapus data');
     }
 }

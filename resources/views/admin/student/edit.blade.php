@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-<div class="container">
+<div class="container-fluid">
 <h4>Siswa</h4>
 <form action="{{route('admin.student.update', $data->nisn)}}" method="post">
 	@if ($errors->any())
@@ -8,8 +8,13 @@
 		<div class="col">
 			<div class="alert alert-danger">
 				<ul>
-	            @foreach ($errors->all() as $error)
-	            <li>{{ $error }}</li>
+					@if(session('fail'))
+					<li>
+					{{ session('fail')}}
+					</li>
+					@endif
+		            @foreach ($errors->all() as $error)
+		            <li>{{ $error }}</li>
 		            @endforeach
 		        </ul>
 		    </div>
@@ -46,7 +51,7 @@
 						<select class="select form-control" id="class" name="class" required >
 							<option value="">Pilih Kelas & Jurusan</option>
 							@foreach($classes as $row)
-							<option value="{{$row->id_class}}" {{$row->id_class = $data->id_class ? 'selected' : ''}}>
+							<option value="{{$row->class_id}}" {{$row->class_id == $data->class_id ? 'selected' : ''}}>
 								{{$row->class_name.' '.$row->competency}}
 							</option>
 							@endforeach
@@ -65,11 +70,11 @@
 					<hr>
 					<label for="spp">Tahun Ajaran (SPP)</label>
 					<div class="input-group">
-						<select class="select form-control" name="spp" required value="{{$data->is_spp}}">
+						<select class="select form-control" name="spp" required >
 							<option value="">Pilih Tahun SPP</option>
 							@foreach($spps as $row)
-							<option value="{{$row->id_spp}}" {{$row->id_spp = $data->id_spp ? 'selected' : ''}}>
-								{{$row->year}}
+							<option value="{{$row->spp_id}}" {{$row->spp_id == $data->spp_id ? 'selected' : ''}}>
+								{{$row->year.' (Rp. '.$row->nominal.')'}}
 							</option>
 							@endforeach
 						</select>

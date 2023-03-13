@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-<div class="container">
+<div class="container-fluid">
 	<h4>Pembayaran SPP</h4>
 	<div class="row">
 		<div class="col">
@@ -10,9 +10,18 @@
 				{{ session('success')}}
 				</div>
 				@endif
-				@if(session('fail'))
+				@if ($errors->any())
 				<div class="alert alert-danger">
-				{{ session('fail')}}
+					<ul>
+					@if(session('fail'))
+						<li>
+							{{ session('fail')}}
+						</li>
+						@endif
+						@foreach ($errors->all() as $error)
+					        <li>{{ $error }}</li>
+				        @endforeach
+				    </ul>
 				</div>
 				@endif
 				<div class="card-body">
@@ -22,11 +31,10 @@
 							<tr>
 								<th>Petugas</th>
 								<th>NISN</th>
-								<th>Nama Siswa</th>	
 								<th>Tanggal Bayar</th>	
 								<th>SPP</th>	
 								<th>Jumlah Bayar</th>	
-
+								<th>Kode</th>
 								<th>Aksi</th>		
 							</tr>
 						</thead>
@@ -34,16 +42,15 @@
 							@foreach($data as $row)
 							<tr>
 								<td>{{$row->name}}</td>
-								<td>{{$row->nisn}}</td>
-								<td>{{$row->student_name}}</td>
-								<td>{{$row->payment_date}}</td>
+								<td>{{$row->payer}}</td>
+								<td>{{date($row->payment_date)}}</td>
 								<td>{{$row->year}}</td>
 								<td>Rp. {{$row->pay_amount}}</td>
+								<td>{{ $row->code }}</td>
 								<td>
 									<form action="{{route('admin.payment.destroy', $row->spp_payment_id)}}" method="post">
 										@csrf
 										@method('DELETE')
-										<a href="{{route('admin.payment.edit', $row->spp_payment_id)}}" class="btn btn-warning btn-sm" data-mdb-toggle="tooltip" title="Ubah Data" data-placement="top"><i class="fas fa-pencil fa-fw"></i></a>
 										<button class="btn btn-danger btn-sm" data-mdb-toggle="tooltip" title="Hapus Data" data-placement="top" onclick="return confirm('Hapus Data?');"><i class="fas fa-trash-can fa-fw"></i></button>
 									</form>
 								</td>

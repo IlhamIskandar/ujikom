@@ -10,6 +10,7 @@ class Student extends Model
 {
     use HasFactory;
     protected $primaryKey = 'nisn';
+    protected $keyType = 'string';
     protected $fillable = [
     	'nisn',
     	'nis',

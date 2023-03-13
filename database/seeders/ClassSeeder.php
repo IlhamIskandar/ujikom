@@ -16,8 +16,20 @@ class ClassSeeder extends Seeder
     public function run()
     {
         DB::table('classes')->insert([
-            'class_name' => 'X',
-            'competency' => 'Rekayasa Perangkat Lunak',
+            'class_name' => 'XII',
+            'competency' => 'Rekayasa Perangkat Lunak 1',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Rekayasa Perangkat Lunak 2',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Multimedia 1',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Multimedia 2',
         ]);
     }
 }

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-<div class="container">
+<div class="container-fluid">
 	<div class="row">
 		<h4>Siswa</h4>
 	</div>
@@ -140,7 +140,7 @@
 		            		<p class="mb-0">Hapus</p>
 		            	</div>
 		            	<div class="col-sm-9">
-			                <form action="{{route('admin.student.destroy', $data->nisn)}}" method="post">
+			                <form action="{{route('admin.student.destroy', $data->user_id)}}" method="post">
 							@csrf
 							@method('DELETE')
 							<button class="btn btn-danger btn-sm" data-mdb-toggle="tooltip" title="Hapus Data" data-placement="top" onclick="return confirm('Hapus Data?');"><i class="fas fa-trash-can fa-fw"></i>

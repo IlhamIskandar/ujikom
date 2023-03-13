@@ -10,5 +10,14 @@ class SppPayment extends Model
     use HasFactory;
     protected $table = "spp_payments";
     protected $primaryKey = 'spp_payment_id';
-
+    // protected $dateFormat = 'U';
+    protected $fillable = [
+        'user_id',
+    	'nisn',
+        'payer',
+        'payment_date',
+    	'spp_id',
+    	'pay_amount',
+        'code',
+    ];
 }

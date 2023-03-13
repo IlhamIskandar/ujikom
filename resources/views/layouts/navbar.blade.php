@@ -11,7 +11,7 @@
 </style>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg {{-- navbar-dark bg-primary --}}">
   <!-- Container wrapper -->
   <div class="container-fluid">
     <!-- Toggle button -->
@@ -39,7 +39,7 @@
           <a class="nav-link" href="{{route('home')}}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{route('payment.entry')}}">Staff</a>
+          <a class="nav-link" href="{{route('payment.entry')}}">Pembayaran</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{route('admin.index')}}">Admin</a>

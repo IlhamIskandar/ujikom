@@ -16,15 +16,25 @@ class StudentSeeder extends Seeder
     public function run()
     {
         DB::table('students')->insert([
-            'nisn' => 123123,
-            'nis' => 0050000001,
-            'student_name' => 'Ilham Iskandar',
+            'nisn' => '0054890314',
+            'nis' => '202110489',
+            'student_name' => 'Muhammad Ilham Iskandar',
             'class_id' => 1,
             'address' => 'Bandung, Jawa Barat',
             'phone_number' => '08123123123',
             'spp_id' => 1 ,
             'user_id' => 3 ,
 
+        ]);
+        DB::table('students')->insert([
+            'nisn' => '0054462930',
+            'nis' => '202110476',
+            'student_name' => 'Farrel Rafiardi Kusmana',
+            'class_id' => 1,
+            'address' => 'Bandung, Jawa Barat',
+            'phone_number' => '+62 832-132-1321',
+            'spp_id' => 2 ,
+            'user_id' => 4 ,
         ]);
     }
 }
