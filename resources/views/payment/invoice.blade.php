@@ -97,6 +97,18 @@
 			        				{{date_format(date_create($data->payment_date),'d M Y H:i:s')}}
 			        			</div>
 			        		</div>
+			        		<div class="row">
+			        			<div class="col-3">
+			        				Keterangan
+			        			</div>
+			        			<div class="col">
+			        				@if($data->information != null)
+			        				{{$data->information}}
+			        				@else
+			        				-
+			        				@endif
+			        			</div>
+			        		</div>
 			        	</div>
 			        </div>
 	        	</div>
