@@ -11,6 +11,7 @@
 	</div>
 	<div class="row d-flex justify-content-center">
 		<div class="col-9 border px-5 py-3">
+			<a class="btn bg-success btn-sm text-white mb-3" href="{{route('payment.entry')}}">Input Pembayaran</a>
 			<table class="table">
 						<thead>
 							<tr>
@@ -27,7 +28,7 @@
 							<tr>
 								<td>{{$row->name}}</td>
 								<td>{{$row->payer}}</td>
-								<td>{{date($row->payment_date)}}</td>
+								<td>{{date_format(date_create($row->payment_date),'d M Y h:i:s')}}</td>
 								<td>{{$row->year}}</td>
 								<td>Rp. {{$row->pay_amount}}</td>
 								<td>{{ $row->code }}</td>

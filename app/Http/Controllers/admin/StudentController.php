@@ -11,6 +11,8 @@ use App\Models\Spp;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Yajra\DataTables\Facades\DataTables;
+
 
 class StudentController extends Controller
 {
@@ -19,11 +21,15 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    // protected $model;
+    // public function __construct(User $model)
+    public function index(Request $filters)
     {
+        // dd($request);
         $classes = Classes::all()->sortBy('class_name');
         $spps = Spp::all()->sortBy('year');
-        $data = Student::join('classes', 'students.class_id', '=', 'classes.class_id')->join('spps','students.spp_id', '=', 'spps.spp_id')->get();
+        $data = Student::filter($filters->all())->join('classes', 'students.class_id', '=', 'classes.class_id')->join('spps','students.spp_id', '=', 'spps.spp_id')->get();
+
         return view('admin.student.index', compact('data','classes', 'spps'));
     }
 
@@ -84,8 +90,12 @@ class StudentController extends Controller
 
             } catch (Exception $e) {
                 DB::rollback();
+                $errorCode = $e->errorInfo[1];
+
+                if($errorCode == 1062){
+                    return redirect()->route('admin.student.create')->with('fail', 'Gagal menambahkan data')->withErrors('Email atau Username telah digunakan')->withInput();
+                }
                 return redirect()->route('admin.student.create')->with('fail', 'Gagal menambahkan data')->withErrors($e->getMessage())->withInput();
-                
             }
 
             // dd($account, $store);
@@ -93,8 +103,13 @@ class StudentController extends Controller
             return redirect()->route('admin.student.index')->with('success', 'Berhasil menambahkan data');
 
         } catch (Exception $e) {
-
             DB::rollback();
+
+            $errorCode = $e->errorInfo[1];
+            if($errorCode == 1062){
+                return redirect()->route('admin.student.create')->with('fail', 'Gagal menambahkan data')->withErrors('Email atau Username telah digunakan')->withInput();
+            }
+
             return redirect()->route('admin.student.create')->with('fail', 'Gagal menambahkan data')->withErrors($e->getMessage())->withInput();
         }
 
@@ -175,12 +190,22 @@ class StudentController extends Controller
                 
             } catch (Exception $e) {
                 DB::rollback();
+
+                $errorCode = $e->errorInfo[1];
+                if($errorCode == 1062){
+                    return redirect()->route('admin.student.edit')->with('fail', 'Gagal menambahkan data')->withErrors('Email atau Username telah digunakan')->withInput();
+                }
+
                 return redirect()->route('admin.student.edit', $id)->with('fail', 'Gagal mengubah data')->withErrors($e->getMessage())->withInput();
             }
 
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
+            $errorCode = $e->errorInfo[1];
+                if($errorCode == 1062){
+                    return redirect()->route('admin.student.edit')->with('fail', 'Gagal menambahkan data')->withErrors('Email atau Username telah digunakan')->withInput();
+                }
             return redirect()->route('admin.student.edit', $id)->with('fail', 'Gagal mengubah data')->withErrors($e->getMessage())->withInput();
         }
 
@@ -206,6 +231,6 @@ class StudentController extends Controller
             return redirect()->route('admin.student.index')->with('fail', 'Gagal menghapus data')->withErrors($e->getMessage());
         }
         
-        return redirect()->route('admin.student.index');
+        return redirect()->route('admin.student.index')->with('succes', 'Berhasil menghapus data');
     }
 }

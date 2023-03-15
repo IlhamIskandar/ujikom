@@ -25,8 +25,20 @@
 				</div>
 				@endif
 				<div class="card-body">
-					<a href="{{route('admin.payment.create')}}" class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw me-3"></i>lakukan pembayaran</a>
-					<table class="table">
+					<div class="d-flex justify-content-between mb-3 align-items-center">
+						<a href="{{route('admin.payment.create')}}" class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw me-3"></i>lakukan pembayaran</a>
+							<form action="{{route('admin.payment.print')}}" method="get">
+								<div class="d-flex align-items-center">
+									<input type="date" name="datefrom" id="datefrom" class="form-control me-2" required>
+									<span>-</span>
+									<input type="date" name="dateto" id="dateto" class="form-control mx-2" required>
+									<button type="submit" class="btn btn-primary">Print</button>
+								</div>
+							</form>
+							{{-- <a href="{{route('admin.payment.print')}}" class="btn btn-primary btn-sm"><i class="fas fa-file fa-fw me-3" ></i>Print</a> --}}
+					</div>
+					<hr>
+					<table class="table" id="datatables">
 						<thead>
 							<tr>
 								<th>Petugas</th>
@@ -43,7 +55,7 @@
 							<tr>
 								<td>{{$row->name}}</td>
 								<td>{{$row->payer}}</td>
-								<td>{{date($row->payment_date)}}</td>
+								<td>{{date_format(date_create($row->payment_date),'d M Y h:i:s')}}</td>
 								<td>{{$row->year}}</td>
 								<td>Rp. {{$row->pay_amount}}</td>
 								<td>{{ $row->code }}</td>
@@ -64,3 +76,10 @@
 	</div>
 </div>
 @endsection
+@push('scripts')
+<script type="text/javascript">
+$('#datatables').DataTable( {
+    paging: false,
+} );
+</script>
+@endpush

@@ -18,6 +18,7 @@ class SppPayment extends Model
         'payment_date',
     	'spp_id',
     	'pay_amount',
+        'information',
         'code',
     ];
 }

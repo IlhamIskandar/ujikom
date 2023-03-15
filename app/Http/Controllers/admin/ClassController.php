@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Classes;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -47,11 +48,18 @@ class ClassController extends Controller
 
         DB::beginTransaction();
         try {
-            $store = Classes::create([
-                'class_name' => $credential['classname'],
-                'competency' => $credential['competency']
-            ]);
-            
+            // $store = Classes::create([
+            //     'class_name' => $credential['classname'],
+            //     'competency' => $credential['competency']
+            // ]);
+            $class = new Classes;
+            $class->class_name = (string)$credential['classname'];
+            $class->competency = (string)$credential['competency'];
+            $class->created_at = Carbon::now('GMT+7');
+
+            $store = DB::select('CALL insert_class(?,?,?,?)', [$class->class_name, $class->competency, Carbon::now('GMT+7'), Carbon::now('GMT+7')]);
+            // dd($store);
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

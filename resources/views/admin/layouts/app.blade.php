@@ -6,6 +6,7 @@
 	<title>Admin Pembayaran SPP</title>
 	<link rel="icon" href="{{asset('storage/img/smknekat-logo.png')}}" type="icon">
 	@include('cdn.mdb-css')
+	@include('cdn.datatables-css')
 	<link rel="stylesheet" type="text/css"	href="/css/style.css">
 </head>
 <body>
@@ -17,5 +18,8 @@
 		@include('admin.layouts.footer')
 	</footer>
 	@include('cdn.mdb-js')
+	@include('cdn.datatables-js')
+	@stack('scripts')
+
 </body>
 </html>

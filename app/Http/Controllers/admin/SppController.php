@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Spp;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class SppController extends Controller
@@ -17,6 +19,7 @@ class SppController extends Controller
     public function index()
     {
         $spp = Spp::all();
+        // $spp = DB::raw('call select_spp');
         return view('admin.spp.index', compact('spp'));
     }
 
@@ -49,7 +52,8 @@ class SppController extends Controller
                 'year' => $credential['year'],
                 'nominal' => $credential['nominal']
             ]);
-
+            // $store = DB::select('CALL insert_spp (?,?,?,?)', [$credential['year'], $credential['nominal'], Carbon::now('GMT+7'),Carbon::now('GMT+7'),]);
+            //     dd($store);
             DB::commit();
         }catch(Exception $e){
             DB::rollback();

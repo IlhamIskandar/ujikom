@@ -25,9 +25,11 @@
 				</div>
 				@endif
 				<div class="card-body">
-					
-					<a href="{{route('admin.student.create')}}" class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw me-3"></i>tambah</a>
-					<table class="table">
+					<div class="align-items-center">
+						<a href="{{route('admin.student.create')}}" class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw me-3"></i>tambah</a>
+					</div>
+					<hr>
+					<table class="table" id="datatables">
 						<thead>
 							<tr>
 								<th>NISN</th>
@@ -69,3 +71,10 @@
 	</div>
 </div>
 @endsection
+@push('scripts')
+<script type="text/javascript">
+$('#datatables').DataTable( {
+    paging: false,
+} );
+</script>
+@endpush

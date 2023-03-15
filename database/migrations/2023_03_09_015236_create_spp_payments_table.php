@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedbiginteger('spp_id');
             // $table->foreign('spp_id')->references('spp_id')->on('students');
             $table->integer('pay_amount');
+            $table->text('information')->nullable();
             $table->string('code', 15);
             $table->timestamps();
         });

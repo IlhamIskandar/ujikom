@@ -38,19 +38,29 @@ class PaymentController extends Controller
 
         if($searchKey != null){
             $data = Student::where('nisn', $searchKey)->join('classes', 'students.class_id', '=', 'classes.class_id')->join('spps','students.spp_id', '=', 'spps.spp_id')->get();
-            // dd($data);
-
+            
             if($data->count() == 0){
                 session()->flash('notfound', 'Data siswa tidak ditemukan');
-                return view('payment.entry', compact('data', 'searchKey'));
+                $paymentSum = "-";
+                $sppNominal = "-";
+                $remaining = "-";
+                return view('payment.entry', compact('data', 'searchKey','remaining', 'paymentSum'));
             }else{
-                return view('payment.entry', compact('data', 'searchKey'));
+                $spp = Student::where('nisn', $searchKey)->join('spps','students.spp_id', '=', 'spps.spp_id')->first();
+                $payments = SppPayment::where([['nisn', $searchKey], ['spp_id', $spp->spp_id]])->get();
+                $paymentSum = $payments->sum('pay_amount');
+                $sppNominal = $spp->nominal;
+                $remaining = $sppNominal - $paymentSum;
+                return view('payment.entry', compact('data', 'searchKey', 'remaining', 'paymentSum'));
             }
 
         }else{
             $data = [];
+            $paymentSum = "-";
+            $sppNominal = "-";
+            $remaining = "-";
             // dd($data);
-            return view('payment.entry', compact('data', 'searchKey'));
+            return view('payment.entry', compact('data', 'searchKey','remaining', 'paymentSum'));
         }
         
         // dd($staff);
@@ -65,34 +75,50 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+        
         $credential = $request->validate([
             'nisn' => 'required',
             'spp_id' => 'required',
             'pay_amount' => 'required',
         ]);
+        $payamount = (int)$credential['pay_amount'];
 
-        // dd($request);
-        DB::beginTransaction();
-        try {
-            $store = SppPayment::create([
-                'user_id' => $user->user_id,
-                'nisn' => $credential['nisn'],
-                'payer' => $credential['nisn'],
-                'payment_date' => Carbon::now('GMT+7'),
-                'spp_id' => $credential['spp_id'],
-                'pay_amount' => $credential['pay_amount'],
-                'code' => Str::random(12),
-            ]);
+        $nisn = $credential['nisn'];
+        $spp = Student::select('students.spp_id', 'nominal')->where('nisn', $nisn)->join('spps', 'spps.spp_id', 'students.spp_id')->first();
+        $payments = SppPayment::where([['nisn', $nisn], ['spp_id', $spp->spp_id]])->get();
+        $paymentSum = $payments->sum('pay_amount');
+        $sppNominal = $spp->nominal;
+        $remaining = $sppNominal - $paymentSum;
+        // dd($remaining);
+        if ($payamount > $sppNominal) {
 
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            return redirect()->route('payment.create')->withErrors($e->getMessage())->withInput();
+            return redirect()->route('payment.entry')->with('fail','Total Bayar melebihi Nominal SPP')->withInput();
+        } elseif ($payamount > $remaining){
+            return redirect()->route('payment.entry')->with('fail','Total Bayar melebihi Sisa Pembayaran')->withInput();
+        }else {
+            
+            // dd($request);
+            DB::beginTransaction();
+            try {
+                $store = SppPayment::create([
+                    'user_id' => $user->user_id,
+                    'nisn' => $credential['nisn'],
+                    'payer' => $credential['nisn'],
+                    'payment_date' => Carbon::now('GMT+7'),
+                    'spp_id' => $credential['spp_id'],
+                    'pay_amount' => $credential['pay_amount'],
+                    'code' => Str::random(12),
+                ]);
+    
+                DB::commit();
+            } catch (Exception $e) {
+                DB::rollBack();
+                return redirect()->route('payment.entry')->withErrors($e->getMessage())->withInput();
+            }
+            $id = $store->spp_payment_id;
+            return redirect()->route('payment.entry')->with('success', 'Berhasil menyimpan data pembayaran');
+            
         }
-
-        return redirect()->route('payment.create')->with('success', 'Berhasil menyimpan data pembayaran');
-        
-        
     }
 
     /**
@@ -102,8 +128,10 @@ class PaymentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
+    {  
+        if ($id != null) {
+            
+        }
     }
 
     /**

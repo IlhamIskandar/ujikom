@@ -39,6 +39,9 @@
           <a class="nav-link" href="{{route('home')}}">Home</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="{{route('student.index')}}">Siswa</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="{{route('payment.entry')}}">Pembayaran</a>
         </li>
         <li class="nav-item">
@@ -77,9 +80,6 @@
           class="dropdown-menu dropdown-menu-end"
           aria-labelledby="navbarDropdownMenuAvatar"
         >
-          <li>
-            <a class="dropdown-item" href="#">Lihat Profil</a>
-          </li>
           <li>
             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

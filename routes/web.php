@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\StudentController;
 use App\Http\Controllers\admin\StaffController;
 use App\Http\Controllers\admin\PayController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\StudentsController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -71,7 +72,8 @@ Route::prefix('admin')->middleware('checkRole:admin')->group(function(){
 		Route::delete('/{id}/destroy', [PayController::class, 'destroy'])->name('admin.payment.destroy');
 		Route::get('/{id}/edit', [PayController::class, 'edit'])->name('admin.payment.edit');
 		Route::put('/{id}/edit/update', [PayController::class, 'update'])->name('admin.payment.update');
-		Route::get('/{id}', [PayController::class, 'show'])->name('admin.payment.show');
+		Route::get('/print', [PayController::class, 'print'])->name('admin.payment.print');
+
 	});
 });
 
@@ -80,7 +82,9 @@ Route::prefix('payment')->middleware('checkRole:admin, staff')->group(function()
 	Route::get('/entry', [PaymentController::class, 'create'])->name('payment.entry');
 	Route::get('/history', [PaymentController::class, 'index'])->name('payment.history');
 	Route::post('/entry/store', [PaymentController::class, 'store'])->name('payment.store');
-
+	Route::get('{id}/invoice', [PaymentController::class, 'show'])->name('payment.show');
 });
-
+Route::prefix('siswa')->middleware('checkRole:siswa')->group(function(){
+	Route::get('/', [StudentsController::class, 'index'])->name('student.index');
+});
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

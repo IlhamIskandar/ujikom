@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="container-fluid">
-	<div class="row bg-info text-white align-items-center justify-content-center gx-0 mb-3" style="height:300px;">
+	<div class="row bg-info text-white align-items-center justify-content-center mb-3" style="height:300px;">
 		<div class="col-3  text-center">
 			<img src="storage/img/smknekat-logo.png" alt="" width="200px">
 		</div>
@@ -9,7 +9,7 @@
 			Permudah pembayaran SPP dan, cek riwayat pembayarannya di website SPP Nekat
 		</div>
 	</div>
-    <div class="row justify-content-center gx-0">
+    <div class="row justify-content-center">
 		<div class="col-4">
 			@guest
 		    

@@ -17,7 +17,8 @@
 				@endif
 				<div class="card-body">
 					<a href="{{route('admin.spp.create')}}" class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw me-3"></i>tambah</a>
-					<table class="table">
+					<hr>
+					<table class="table" id="datatables">
 						<thead>
 							<tr>
 								<th>Tahun</th>
@@ -48,3 +49,10 @@
 	</div>
 </div>
 @endsection
+@push('scripts')
+<script type="text/javascript">
+$('#datatables').DataTable( {
+    paging: false,
+} );
+</script>
+@endpush

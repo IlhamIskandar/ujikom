@@ -9,15 +9,24 @@
 	<div class="row text-center">
 		<h2>Pembayaran SPP</h2>
 	</div>
-	<div class="row">
-		<div class="col-8">
-			@if(session('success'))
-			<div class="alert alert-success">
-			{{ session('success')}}
+	@if(session('success'))
+	<div class="row d-flex justify-content-center">
+		<div class="col-8 alert alert-success">
+			<div class="">
+				{{ session('success')}}
 			</div>
-			@endif
 		</div>
 	</div>
+	@endif
+	@if(session('fail'))
+	<div class="row d-flex justify-content-center">
+		<div class="col-8 alert alert-danger">
+			<div class="">
+				{{ session('fail')}}
+			</div>
+		</div>
+	</div>
+	@endif
 	<div class="row d-flex justify-content-center">
 		<div class="col-8 border px-5 py-3">
 
@@ -79,6 +88,28 @@
 											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $d->nominal }}">
 										</div>
 									</div>
+									<div class="mb-3">
+										<label for="nominal">Telah Dibayar</label>
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $paymentSum }}">
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="nominal">Sisa Pembayaran</label>
+										@if ($remaining <= 0)
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="Sudah Lunas">
+										</div>
+										@else
+										
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $remaining }}">
+										</div>
+										@endif
+									</div>
 									<input class="form-control" type="text" name="spp_id" id="spp_id" hidden value="{{ $d->spp_id }}">
 									<input class="form-control alert-secondary" type="text" name="nisn" id="nisn" hidden value="{{ $d->nisn }}">
 
@@ -122,6 +153,20 @@
 										<label for="nominal">Nominal SPP</label>
 										<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP" autofocus disabled>
 									</div>
+									<div class="mb-3">
+										<label for="nominal">Telah Dibayar</label>
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $paymentSum }}">
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="nominal">Sisa Pembayaran</label>
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $remaining }}">
+										</div>
+									</div>
 								</div>
 							</div>
 							
@@ -130,6 +175,23 @@
 							<div class="row">
 								<div class="col">
 								@forelse ($data as $d)
+									@if ($remaining == '0')
+									<div class="row">
+										<div class="col-6 mb-2">
+											<label for="pay_amount"><h3>Total Bayar</h3></label>
+											<div class="input-group">
+												<span class="input-group-text " id="basic-addon1">Rp.</span>
+												<input class="form-control" type="text" name="pay_amount" id="pay_amount" placeholder="Pembayaran sudah lunas"  disabled>
+											</div>
+										</div>
+									</div>
+									<hr>
+									<div class="row">
+										<div class="col d-flex justify-content-between align-items-center">
+											<button class="btn bg-secondary" disabled type="submit">Lakukan Pembayaran</button>
+										</div>
+									</div>
+									@else
 									<div class="row">
 										<div class="col-6 mb-2">
 											<label for="pay_amount"><h3>Total Bayar</h3></label>
@@ -145,6 +207,8 @@
 											<button class="btn bg-danger text-white" type="submit">Lakukan Pembayaran</button>
 										</div>
 									</div>
+										
+									@endif
 								@empty
 									<div class="row">
 										<div class="col-6 mb-2">

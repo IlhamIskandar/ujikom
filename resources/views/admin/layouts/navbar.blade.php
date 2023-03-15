@@ -54,15 +54,15 @@
           <i class="fas fa-calendar-days fa-fw me-3"></i><span>SPP</span>
         </a>
         <a href="{{route('admin.class.index')}}" class="list-group-item list-group-item-action py-2 ripple {{ request()->routeIs('admin.class.*') ? 'active' : '' }}"
-          ><i class="fas fa-chart-line fa-fw me-3"></i><span>Kelas</span></a
+          ><i class="fas fa-chalkboard fa-fw me-3"></i></i><span>Kelas</span></a
         >
         <a href="{{route('admin.student.index')}}" class="list-group-item list-group-item-action py-2 ripple {{ request()->routeIs('admin.student.*') ? 'active' : '' }}"
-          ><i class="fas fa-users fa-fw me-3"></i><span>Siswa</span></a
+          ><i class="fas fa-user-graduate fa-fw me-3"></i><span>Siswa</span></a
         >
         <a href="{{route('admin.staff.index')}}" class="list-group-item list-group-item-action py-2 ripple {{ request()->routeIs('admin.staff.*') ? 'active' : '' }}">
-          <i class="fas fa-chart-pie fa-fw me-3"></i><span>Staff</span>
+          <i class="fas fa-user-tie fa-fw me-3"></i></i><span>Staff</span>
         </a>
-        <a href="{{route('admin.payment.index')}}" class="list-group-item list-group-item-action py-2 ripple"
+        <a href="{{route('admin.payment.index')}}" class="list-group-item list-group-item-action py-2 ripple {{ request()->routeIs('admin.payment.*') ? 'active' : '' }}" 
           ><i class="fas fa-money-bill fa-fw me-3"></i></i><span>Pembayaran</span></a
         >
       </div>
@@ -123,9 +123,6 @@
             class="dropdown-menu dropdown-menu-end"
             aria-labelledby="navbarDropdownMenuLink"
           >
-            <li>
-              <a class="dropdown-item" href="#">Lihat Profil</a>
-            </li>
             <li>
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

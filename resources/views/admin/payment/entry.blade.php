@@ -2,20 +2,18 @@
 @section('content')
 <div class="container-fluid">
 	<h4>Pembayaran SPP</h4>
-	@if ($errors->any())
-				<div class="alert alert-danger">
-					<ul>
-					@if(session('fail'))
-						<li>
-							{{ session('fail')}}
-						</li>
-						@endif
-						@foreach ($errors->all() as $error)
-					        <li>{{ $error }}</li>
-				        @endforeach
-				    </ul>
-				</div>
-				@endif
+	@if ($errors->any() || session('fail'))
+	<div class="alert alert-danger">
+		<ul>
+			<li>
+				{{ session('fail')}}
+			</li>
+			@foreach ($errors->all() as $error)
+				<li>{{ $error }}</li>
+			@endforeach
+		</ul>
+	</div>
+	@endif
 	<div class="row">
 		<div class="col">
 			<div class="card">
@@ -71,15 +69,37 @@
 											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $d->nominal }}">
 										</div>
 									</div>
+									<div class="mb-3">
+										<label for="nominal">Telah Dibayar</label>
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $paymentSum }}">
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="nominal">Sisa Pembayaran</label>
+										@if ($remaining <= 0)
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="Sudah Lunas">
+										</div>
+										@else
+										
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $remaining }}">
+										</div>
+										@endif
+									</div>
 									<input class="form-control" type="text" name="spp_id" id="spp_id" hidden value="{{ $d->spp_id }}">
 									<input class="form-control alert-secondary" type="text" name="nisn" id="nisn" hidden value="{{ $d->nisn }}">
 
 								</div>
 							</div>
 							@empty
-							@if(session('fail'))
+							@if(session('notfound'))
 								<div class="row alert alert-danger">
-									{{ session('fail')}}
+									{{ session('notfound')}}
 								</div>
 							@endif
 							<div class="row alert-secondary p-3 rounded">
@@ -114,6 +134,20 @@
 										<label for="nominal">Nominal SPP</label>
 										<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP" autofocus disabled>
 									</div>
+									<div class="mb-3">
+										<label for="nominal">Telah Dibayar</label>
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $paymentSum }}">
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="nominal">Sisa Pembayaran</label>
+										<div class="input-group">
+											<span class="input-group-text" id="basic-addon1">Rp.</span>
+											<input class="form-control" type="text" name="nominal" id="nominal" placeholder="Nominal SPP"  disabled value="{{ $remaining }}">
+										</div>
+									</div>
 								</div>
 							</div>
 							
@@ -121,12 +155,15 @@
 							<hr>
 							<div class="row">
 								@forelse ($data as $d)
+								<label for="pay_amount"><h3>Total Bayar</h3></label>
 								<div class="col-6 mb-3">
-									<label for="pay_amount"><h3>Total Bayar</h3></label>
 									<div class="input-group">
 										<span class="input-group-text" id="basic-addon1">Rp.</span>
 										<input class="form-control" type="text" name="pay_amount" id="pay_amount" placeholder="masukan jumlah bayar" value="" required>
 									</div>
+								</div>
+								<div class="col-6 mb-3">
+									<textarea class="form-control" type="text" name="information" id="information" placeholder="Tambahkan keterangan" rows="1"></textarea>
 								</div>
 								<hr>
 								<div>
@@ -134,12 +171,15 @@
 									<a class="btn btn-secondary" href="{{route('admin.payment.index')}}">kembali</a>
 								</div>
 								@empty
+								<label for="pay_amount"><h3>Total Bayar</h3></label>
 								<div class="col-6 mb-3">
-									<label for="pay_amount"><h3>Total Bayar</h3></label>
 									<div class="input-group">
 										<span class="input-group-text " id="basic-addon1">Rp.</span>
 										<input class="form-control" type="text" name="pay_amount" id="pay_amount" placeholder="masukan jumlah bayar"  disabled>
 									</div>
+								</div>
+								<div class="col-6 mb-3">
+									<textarea class="form-control" type="text" name="information" id="information" placeholder="Tambahkan keterangan" disabled rows="1"></textarea>
 								</div>
 								<hr>
 								<div>
