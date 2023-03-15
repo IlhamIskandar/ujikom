@@ -80,6 +80,8 @@ class PaymentController extends Controller
             'nisn' => 'required',
             'spp_id' => 'required',
             'pay_amount' => 'required',
+            'information' => '',
+
         ]);
         $payamount = (int)$credential['pay_amount'];
 
@@ -107,6 +109,7 @@ class PaymentController extends Controller
                     'payment_date' => Carbon::now('GMT+7'),
                     'spp_id' => $credential['spp_id'],
                     'pay_amount' => $credential['pay_amount'],
+                    'information' => $credential['information'],
                     'code' => Str::random(12),
                 ]);
     

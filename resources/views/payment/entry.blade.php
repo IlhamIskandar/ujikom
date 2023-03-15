@@ -27,6 +27,19 @@
 		</div>
 	</div>
 	@endif
+	@if ($errors->any())
+	<div class="row">
+		<div class="col">
+			<div class="alert alert-danger">
+				<ul>
+		            @foreach ($errors->all() as $error)
+		            <li>{{ $error }}</li>
+		            @endforeach
+		        </ul>
+		    </div>
+		</div>
+	</div>
+	@endif
 	<div class="row d-flex justify-content-center">
 		<div class="col-8 border px-5 py-3">
 
@@ -173,60 +186,37 @@
 							@endforelse
 							<hr>
 							<div class="row">
-								<div class="col">
 								@forelse ($data as $d)
-									@if ($remaining == '0')
-									<div class="row">
-										<div class="col-6 mb-2">
-											<label for="pay_amount"><h3>Total Bayar</h3></label>
-											<div class="input-group">
-												<span class="input-group-text " id="basic-addon1">Rp.</span>
-												<input class="form-control" type="text" name="pay_amount" id="pay_amount" placeholder="Pembayaran sudah lunas"  disabled>
-											</div>
-										</div>
+								<label for="pay_amount"><h3>Total Bayar</h3></label>
+								<div class="col-6 mb-3">
+									<div class="input-group">
+										<span class="input-group-text" id="basic-addon1">Rp.</span>
+										<input class="form-control" type="text" name="pay_amount" id="pay_amount" placeholder="masukan jumlah bayar" value="" required>
 									</div>
-									<hr>
-									<div class="row">
-										<div class="col d-flex justify-content-between align-items-center">
-											<button class="btn bg-secondary" disabled type="submit">Lakukan Pembayaran</button>
-										</div>
-									</div>
-									@else
-									<div class="row">
-										<div class="col-6 mb-2">
-											<label for="pay_amount"><h3>Total Bayar</h3></label>
-											<div class="input-group">
-												<span class="input-group-text" id="basic-addon1">Rp.</span>
-												<input class="form-control" type="text" name="pay_amount" id="pay_amount" placeholder="masukan jumlah bayar" value="" required>
-											</div>
-										</div>
-									</div>
-									<hr>
-									<div class="row">
-										<div class="col d-flex justify-content-between align-items-center">
-											<button class="btn bg-danger text-white" type="submit">Lakukan Pembayaran</button>
-										</div>
-									</div>
-										
-									@endif
-								@empty
-									<div class="row">
-										<div class="col-6 mb-2">
-											<label for="pay_amount"><h3>Total Bayar</h3></label>
-											<div class="input-group">
-												<span class="input-group-text " id="basic-addon1">Rp.</span>
-												<input class="form-control" type="text" name="pay_amount" id="pay_amount" placeholder="masukan jumlah bayar"  disabled>
-											</div>
-										</div>
-									</div>
-									<hr>
-									<div class="row">
-										<div class="col d-flex justify-content-between align-items-center">
-											<button class="btn bg-secondary" disabled type="submit">Lakukan Pembayaran</button>
-										</div>
-									</div>
-								@endforelse
 								</div>
+								<div class="col-6 mb-3">
+									<textarea class="form-control" type="text" name="information" id="information" placeholder="Tambahkan keterangan" rows="1"></textarea>
+								</div>
+								<hr>
+								<div>
+									<button class="btn btn-danger" type="submit">Lakukan Pembayaran</button>
+								</div>
+								@empty
+								<label for="pay_amount"><h3>Total Bayar</h3></label>
+								<div class="col-6 mb-3">
+									<div class="input-group">
+										<span class="input-group-text " id="basic-addon1">Rp.</span>
+										<input class="form-control" type="text" name="pay_amount" id="pay_amount" placeholder="masukan jumlah bayar"  disabled>
+									</div>
+								</div>
+								<div class="col-6 mb-3">
+									<textarea class="form-control" type="text" name="information" id="information" placeholder="Tambahkan keterangan" disabled rows="1"></textarea>
+								</div>
+								<hr>
+								<div>
+									<button class="btn bg-secondary" disabled type="submit">Lakukan Pembayaran</button>
+								</div>
+								@endforelse
 							</div>
 						</form>
 					</div>
