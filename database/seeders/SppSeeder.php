@@ -20,7 +20,7 @@ class SppSeeder extends Seeder
             'nominal' => 2700000,
         ]);
         DB::table('spps')->insert([
-            'year' => '2022/2023',
+            'year' => '2021/2022',
             'nominal' => 3000000,
         ]);
         DB::table('spps')->insert([

@@ -31,5 +31,61 @@ class ClassSeeder extends Seeder
             'class_name' => 'XII',
             'competency' => 'Multimedia 2',
         ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Teknik Gambar Mesin 1',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Teknik Gambar Mesin 2',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Mesin 1',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Mesin 2',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Mekatronika 1',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Mekatronika 2',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Elektro 1',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Elektro 2',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Teknik Gambar Mesin 1',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Teknik Gambar Mesin 2',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Tekstil 1',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Tekstil 2',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Teknik Kendaraan Ringan 1',
+        ]);
+        DB::table('classes')->insert([
+            'class_name' => 'XII',
+            'competency' => 'Teknik Kendaraan Ringan 2',
+        ]);
     }
 }
