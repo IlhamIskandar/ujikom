@@ -49,7 +49,7 @@
 								<td class="text-truncate" style="max-width: 180px">{{$row->student_name}}</td>
 								<td class="text-truncate" style="max-width: 130px">{{$row->class_name.' '.$row->competency}}</td>
 								<td>{{$row->phone_number}}</td>
-								<td>{{$row->year}}</td>
+								<td>{{$row->year.'(Rp. '.$row->nominal.')'}}</td>
 								<td>
 									<form action="{{route('admin.student.destroy', $row->user_id)}}" method="post">
 										@csrf

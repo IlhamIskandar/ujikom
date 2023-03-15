@@ -30,7 +30,7 @@
 								<td>{{$row->name}}</td>
 								<td>{{$row->payer}}</td>
 								<td>{{date_format(date_create($row->payment_date),'d M Y H:i:s')}}</td>
-								<td>{{$row->year}}</td>
+								<td>{{$row->year.'(Rp. '.$row->nominal.')'}}</td>
 								<td>Rp. {{$row->pay_amount}}</td>
 								<td>{{ $row->code }}</td>
 								<td>

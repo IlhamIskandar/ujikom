@@ -164,8 +164,10 @@ class PayController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
+    {  
+        $data = SppPayment::where('spp_payment_id', $id)->join('students', 'students.nisn', '=', 'spp_payments.nisn')->join('spps', 'spps.spp_id', '=', 'spp_payments.spp_id')->join('classes', 'students.class_id', '=', 'classes.class_id')->join('users', 'users.user_id', '=', 'spp_payments.user_id')->first();
+        // dd($data);
+        return view('admin.payment.show', compact('data'));
     }
 
     /**

@@ -73,6 +73,7 @@ Route::prefix('admin')->middleware('checkRole:admin')->group(function(){
 		Route::get('/{id}/edit', [PayController::class, 'edit'])->name('admin.payment.edit');
 		Route::put('/{id}/edit/update', [PayController::class, 'update'])->name('admin.payment.update');
 		Route::get('/print', [PayController::class, 'print'])->name('admin.payment.print');
+		Route::get('{id}/show', [PayController::class, 'show'])->name('admin.payment.show');
 
 	});
 });

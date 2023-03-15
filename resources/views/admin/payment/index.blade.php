@@ -45,7 +45,8 @@
 								<th>NISN</th>
 								<th>Tanggal Bayar</th>	
 								<th>SPP</th>	
-								<th>Jumlah Bayar</th>	
+								<th>Jumlah Bayar</th>
+								<th>Keterangan</th>		
 								<th>Kode</th>
 								<th>Aksi</th>		
 							</tr>
@@ -56,13 +57,21 @@
 								<td>{{$row->name}}</td>
 								<td>{{$row->payer}}</td>
 								<td>{{date_format(date_create($row->payment_date),'d M Y H:i:s')}}</td>
-								<td>{{$row->year}}</td>
+								<td>{{$row->year.'(Rp. '.$row->nominal.')'}}</td>
 								<td>Rp. {{$row->pay_amount}}</td>
+								<td class="text-truncate" style="max-width: 130px">@if($row->information != null)
+			        				{{$row->information}}
+			        				@else
+			        				-
+			        				@endif
+			        			</td>
 								<td>{{ $row->code }}</td>
 								<td>
 									<form action="{{route('admin.payment.destroy', $row->spp_payment_id)}}" method="post">
 										@csrf
 										@method('DELETE')
+										<a href="{{route('admin.payment.show', $row->spp_payment_id)}}" class="btn btn-info btn-sm" data-mdb-toggle="tooltip" title="Detail Data" data-placement="top"><i class="fas fa-file fa-fw"></i></a>   
+
 										<button class="btn btn-danger btn-sm" data-mdb-toggle="tooltip" title="Hapus Data" data-placement="top" onclick="return confirm('Hapus Data?');"><i class="fas fa-trash-can fa-fw"></i></button>
 									</form>
 								</td>
