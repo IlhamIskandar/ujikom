@@ -79,7 +79,7 @@
     <div class="row my-3">
         <div class="col card px-0 border">
             <div class="card-header d-flex justify-content-between align-item-center">
-                <h5>{{ $p->payment_date }}</h5>
+                <h5>{{date_format(date_create($p->payment_date),'d M Y H:i:s')}}</h5>
                 <div class="row">
                     <span>Kode Pembayaran : {{ $p->code }}</span>
                 </div>

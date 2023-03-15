@@ -37,7 +37,7 @@
                 <td style="max-width: 4px;">{{$loop->iteration}}</td>
                 <td>{{$row->name}}</td>
                 <td>{{$row->payer}}</td>
-                <td>{{date_format(date_create($row->payment_date),'d M Y h:i:s')}}</td>
+                <td>{{date_format(date_create($row->payment_date),'d M Y H:i:s')}}</td>
                 <td>{{$row->year}}</td>
                 <td>Rp. {{$row->pay_amount}}</td>
                 <td>{{ $row->code }}</td>

@@ -129,9 +129,9 @@ class PaymentController extends Controller
      */
     public function show($id)
     {  
-        if ($id != null) {
-            
-        }
+        $data = SppPayment::where('spp_payment_id', $id)->join('students', 'students.nisn', '=', 'spp_payments.nisn')->join('spps', 'spps.spp_id', '=', 'spp_payments.spp_id')->join('classes', 'students.class_id', '=', 'classes.class_id')->join('users', 'users.user_id', '=', 'spp_payments.user_id')->first();
+        // dd($data);
+        return view('payment.invoice', compact('data'));
     }
 
     /**

@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Pembayaran SPP</title>
 	@include('cdn.mdb-css')
+	@include('cdn.datatables-css')
 	<link rel="icon" href="{{asset('storage/img/smknekat-logo.png')}}" type="icon">	
 	<link rel="stylesheet" type="text/css"	href="/css/style.css">
 </head>
@@ -19,5 +20,7 @@
 		@include('layouts.footer')
 	</footer>
 	@include('cdn.mdb-js')
+	@include('cdn.datatables-js')
+	@stack('scripts')
 </body>
 </html>
